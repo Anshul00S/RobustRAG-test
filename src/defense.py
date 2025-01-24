@@ -60,6 +60,7 @@ class RRAG:
         raise NotImplementedError
 
     def _eval_response(self,response,data_item):
+        logger.info(f'Response: {response}')
         answer = data_item['answer']
         response = clean_str(response)
         for ans in answer:
@@ -273,7 +274,7 @@ class KeywordAgg(RRAG):
 
             response_list = []
             # break into batches and query
-            batch_size = 20
+            batch_size = 16
             #for i in tqdm(range(0, len(prompt_list), batch_size)):
             for i in range(0, len(prompt_list), batch_size):
                 if i+batch_size > len(prompt_list):

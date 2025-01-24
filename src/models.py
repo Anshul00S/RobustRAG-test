@@ -19,6 +19,7 @@ from .prompt_template import *
 MAX_NEW_TOKENS = 20
 CONTEXT_MAX_TOKENS = {'mistralai/Mistral-7B-Instruct-v0.2': 8192, 
                       'meta-llama/Llama-2-7b-chat-hf': 4096, 
+                      'meta-llama/Llama-2-2b-chat-hf': 4096, 
                       'meta-llama/Llama-2-13b-chat-hf': 4096,
                       'meta-llama/Meta-Llama-3-8B-Instruct': 8192, 
                       'mistralai/Mixtral-8x7B-Instruct-v0.1': 32000,
@@ -32,7 +33,9 @@ def create_model(model_name,**kwargs):
     if model_name == 'mistral7b':
         return HFModel('mistralai/Mistral-7B-Instruct-v0.2',MISTRAL_TMPL,**kwargs) 
     elif model_name == 'llama7b':
-        return HFModel('meta-llama/Llama-2-7b-chat-hf',LLAMA_TMPL,**kwargs) 
+        return HFModel('meta-llama/Llama-2-2b-chat-hf',LLAMA_TMPL,**kwargs)
+    elif model_name == 'llama2b':
+        return HFModel('meta-llama/Llama-2-7b-chat-hf',LLAMA_TMPL,**kwargs)  
     elif model_name == 'gpt3.5':
         return GPTModel('gpt-3.5-turbo-0125', GPT_TMPL, **kwargs) 
     # some other models that are not included in the paper

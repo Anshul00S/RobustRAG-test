@@ -1,5 +1,7 @@
 *.log
 *.pyc
+*.env
+
 *.out
 *.z
 log
@@ -7,4 +9,5 @@ logs
 result
 result_certify
 data/clean_data.py
+env
 

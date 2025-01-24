@@ -14,7 +14,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Robust RAG')
 
     # LLM settings
-    parser.add_argument('--model_name', type=str, default='mistral7b',choices=['mistral7b','llama7b','gpt3.5'],help='model name')
+    parser.add_argument('--model_name', type=str, default='mistral7b',choices=['mistral7b','llama7b','gpt3.5', 'llama2b'],help='model name')
     parser.add_argument('--dataset_name', type=str, default='realtimeqa',choices=['realtimeqa-mc','realtimeqa','open_nq','biogen'],help='dataset name')
     parser.add_argument('--top_k', type=int, default=10,help='top k retrieval')
 
@@ -44,6 +44,7 @@ def parse_args():
 
 
 def main():
+    torch.cuda.empty_cache()
     args = parse_args()
     LOG_NAME = get_log_name(args)
     logging_level = logging.DEBUG if args.debug else logging.INFO
@@ -127,17 +128,19 @@ def main():
     defended_asr_cnt = 0
     corr_list = []
     response_list = []
-    for data_item in tqdm(data_tool.data[:100]):
+    for data_item in tqdm(data_tool.data[:10]):
        
         # clean data_item
         data_item = data_tool.process_data_item(data_item)
         # attack
         if not no_attack:
             data_item = attacker.attack(data_item)
+
         
         # undefended
         if not args.no_vanilla:
             response_undefended = model.query_undefended(data_item)
+            logger.info(f'undefended: {response_undefended}')
             undefended_corr = data_tool.eval_response(response_undefended,data_item)
             undefended_corr_cnt += undefended_corr
         else:
